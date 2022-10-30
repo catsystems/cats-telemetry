@@ -1,5 +1,7 @@
 
-#include <math.h>
+#pragma once
+
+#include <cmath>
 
 template <uint32_t B> class Thermistor {
 public:

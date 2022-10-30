@@ -18,14 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "SX1280Driver/SX1280Driver.h"
-#include "SerialComm/Parser.h"
-#include "Transmission/Transmission.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "FHSS/crc.h"
-#include "SerialComm/serial.hpp"
+#include "SX1280Driver/SX1280Driver.h"
+#include "SerialComm/Parser.h"
+#include "SerialComm/Serial.h"
+#include "Transmission/Transmission.h"
 #include "common.h"
 #include "gps.h"
 #include "util/thermistor.h"
