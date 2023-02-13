@@ -11,6 +11,14 @@
 uint8_t c1;
 uint32_t lr1;
 
+static uint8_t ublox_request_115200_baud[] = {
+    0xb5, 0x62, 0x06, 0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00,
+    0xd0, 0x08, 0x00, 0x00, 0x00, 0xc2, 0x01, 0x00, 0x07, 0x00,
+    0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc4, 0x96, 0xb5, 0x62,
+    0x06, 0x00, 0x01, 0x00, 0x01, 0x08, 0x22};
+static uint8_t ublox_request_10Hz[] = {0xB5, 0x62, 0x06, 0x08, 0x06,
+                                       0x00, 0x64, 0x00, 0x01, 0x00,
+                                       0x01, 0x00, 0x7A, 0x12};
 TinyGPSPlus gps;
 
 extern UART_HandleTypeDef huart1;
@@ -19,9 +27,17 @@ void gpsSetup() {
 
   uint8_t command[20];
 
-  /* Request UART speed of 115200 */
-  sprintf((char *)command, "$PCAS01,5*19\r\n");
-  HAL_UART_Transmit(&huart1, command, 14, 100);
+  // Check hardware version
+  if (HAL_GPIO_ReadPin(HARDWARE_ID_GPIO_Port, HARDWARE_ID_Pin)) {
+    // Flight computer
+    HAL_UART_Transmit(&huart1, ublox_request_115200_baud,
+                      sizeof(ublox_request_115200_baud), 100);
+  } else {
+    // Groundstation
+    /* Request UART speed of 115200 */
+    sprintf((char *)command, "$PCAS01,5*19\r\n");
+    HAL_UART_Transmit(&huart1, command, 14, 100);
+  }
 
   HAL_Delay(200);
 
@@ -32,16 +48,21 @@ void gpsSetup() {
 
   HAL_Delay(200);
 
-  /* Request 10Hz update rate */
-  sprintf((char *)command, "$PCAS02,100*1E\r\n");
-  HAL_UART_Transmit(&huart1, command, 16, 100);
+  // Check hardware version
+  if (HAL_GPIO_ReadPin(HARDWARE_ID_GPIO_Port, HARDWARE_ID_Pin)) {
+    // Flight computer
+    HAL_UART_Transmit(&huart1, ublox_request_10Hz, sizeof(ublox_request_10Hz),
+                      100);
+  } else {
+    // Groundstation
+    /* Request 10Hz update rate */
+    sprintf((char *)command, "$PCAS02,100*1E\r\n");
+    HAL_UART_Transmit(&huart1, command, 16, 100);
 
-  HAL_Delay(10);
+    HAL_Delay(10);
 
-  /* Request airbourne <4g mode*/
-  sprintf((char *)command, "$PCAS11,7*1A\r\n");
-  HAL_UART_Transmit(&huart1, command, 14, 100);
-
-  /* Start receiving data from the module */
-  // HAL_UART_Receive_IT(&huart1, (uint8_t *)&c1, 1);
+    /* Request airbourne <4g mode*/
+    sprintf((char *)command, "$PCAS11,7*1A\r\n");
+    HAL_UART_Transmit(&huart1, command, 14, 100);
+  }
 }

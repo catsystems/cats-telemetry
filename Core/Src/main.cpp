@@ -212,6 +212,8 @@ int main(void) {
 
         HAL_UART_Transmit(&huart2, uartOutBuffer, 15, 2);
       }
+
+      HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
     }
 
     /* Transmit GPS Satellite Information */
@@ -591,11 +593,11 @@ static void MX_GPIO_Init(void) {
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BUSY_Pin */
-  GPIO_InitStruct.Pin = BUSY_Pin;
+  /*Configure GPIO pins : BUSY_Pin HARDWARE_ID_Pin */
+  GPIO_InitStruct.Pin = BUSY_Pin | HARDWARE_ID_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(BUSY_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : FE_EN_Pin RX_EN_Pin LED_Pin */
   GPIO_InitStruct.Pin = FE_EN_Pin | RX_EN_Pin | LED_Pin;
