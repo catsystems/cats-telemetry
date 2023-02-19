@@ -120,9 +120,10 @@ int main(void) {
   /* USER CODE BEGIN 2 */
 
   /* Set code version */
-  const char* telemetry_code_version = "1.0.0";
+  const char *telemetry_code_version = "1.0.0";
   uint8_t code_version_size = strlen(telemetry_code_version);
-  const uint8_t* code_version = reinterpret_cast<const uint8_t*>(telemetry_code_version);
+  const uint8_t *code_version =
+      reinterpret_cast<const uint8_t *>(telemetry_code_version);
 
   /* Wait for the GNSS module to initialize*/
   HAL_Delay(4000);
@@ -212,8 +213,6 @@ int main(void) {
 
         HAL_UART_Transmit(&huart2, uartOutBuffer, 15, 2);
       }
-
-      HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
     }
 
     /* Transmit GPS Satellite Information */
@@ -259,7 +258,7 @@ int main(void) {
       HAL_UART_Transmit(&huart2, uartOutBuffer, 7, 2);
     }
 
-    if(send_version_num){
+    if (send_version_num) {
       /* Send Version number to Host */
       uartOutBuffer[0] = CMD_VERSION_INFO;
       uartOutBuffer[1] = code_version_size;
@@ -270,8 +269,6 @@ int main(void) {
       HAL_UART_Transmit(&huart2, uartOutBuffer, code_version_size + 3, 2);
       send_version_num = false;
     }
-
-
   }
 }
 
