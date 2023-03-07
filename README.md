@@ -4,6 +4,8 @@
 
 *Always land on your paws*
 
+## NOTE: This repo is archived and merged into [catsystems/cats-embedded](https://github.com/catsystems/cats-embedded).
+
 This repository contains all firmware for the telemetry microcontroller.
 
 ## Features
